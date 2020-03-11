@@ -18,6 +18,7 @@ const getExchange=async (fromCurrency,toCurrency)=>{
 const getCountry= async(fromCurrency)=>{
     try{
     const response= await axios.get(`https://restcountries.eu/rest/v2/currency/${fromCurrency}`);
+    
     //console.log( response.data.map(country=>country.name));
     console.log(response.data);
     return response.data.map(country=>country.name);
@@ -31,8 +32,27 @@ const getCountry= async(fromCurrency)=>{
     //console.log(response.data.map(country=>country.name));
 }
 
-getCountry('INR');
-const convertCurrency=async(fromCurrency,toCurrency,amount)=>{
+const convertCurrencyUsingName =async(fromcountry,toCountry,amount)=>{
+    try{
+    const country1=await axios.get(`https://restcountries.eu/rest/v2/name/${fromcountry}`);
+    //console.log(country1.data.map(currency=>currency.currencies));
+    var data=country1.data.map(currency=>currency.currencies);
+    console.log(data[0]);
+   
+
+    const country2=await axios.get(`https://restcountries.eu/rest/v2/name/${toCountry}`);
+    console.log(country2.data.map(currency=>currency.currencies));
+    }catch(error)
+    {
+        return error;
+    }
+
+
+}
+//getCountry('INR');
+
+convertCurrencyUsingName('iran','india');
+const convertCurrencyUsingCode=async(fromCurrency,toCurrency,amount)=>{
     fromCurrency= fromCurrency.toUpperCase(fromCurrency);
     toCurrency= toCurrency.toUpperCase(toCurrency);
     const countries=await getCountry(toCurrency);
